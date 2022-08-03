@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ssh jjm@192.168.0.160 'cat > /tmp/FK.jed && sudo xc3sprog/build/xc3sprog -c sysfsgpio_creator -v -p0 /tmp/FK.jed && rm -f /tmp/FK.jed' < zx81ula.jed
