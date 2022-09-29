@@ -1,0 +1,21 @@
+{ signal: [
+  { name: "clk65",        wave: "P...........", period: 2, node: "..ij"},
+  { name: "z80clk",       wave: "P.....", period: 4, node:"..a.."},
+  { name: "addr[0..15]",  wave: "xxxx3.......4.......x...", data: ["addr (a15=1)", "I+Data+Cnt or I+R (A14=1)"] },
+  { name: "addr'[0..8]",  wave: "xxxx3.......4.......x...", data: ["addr(low)", "Data+Cnt (a14=0 T3&T4)"] },
+  { name: "data[0..7]",   wave: "zzzzzz3...0...z5....z...", data: ["RAM (d6=0)",  "ROM"], node: "............d.g....." },
+  { name: "/m1",          wave: "xxx10.......1.......x..." , node: "........b......."},
+  { name: "/halt",        wave: "xxx1................x..." },
+  { name: "/mreq",        wave: "xxx1.0......1.0...1.x..." },
+  { name: "/rd",          wave: "xxx1.0......1.......x..." },
+  { name: "/RamCs",       wave: "xxx1.0......1.......x..." },
+  { name: "/RomCs",       wave: "xxx1..........0.....x..." },
+  { name: "T2=latch_en",  wave: "xxx0....1...0..........." },
+  { name: "hT2=forceNOP", wave: "xxx0......1...0........." , node: "..........c.e.f.." },
+  { name: "T3",           wave: "xxx0........1...0......." , node: "............h...." },  
+  { name: "T4",           wave: "xxx0............1...0..." },
+  { name: "hT4",          wave: "xxx0..............1...0." },
+  { name: "T4e=t_load",   wave: "xxx0..............1.0..." },
+  
+  ], edge: [ 'a->b','b~->c','i+j 150ns', 'c->h', 'd<->e', 'f<->g' ]
+}
