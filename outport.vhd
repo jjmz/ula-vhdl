@@ -18,10 +18,12 @@ end outport;
 
 architecture Behavioral of outport is
 
+signal Dout: std_logic_vector(7 downto 0);
+
 begin
 
-D <= "00000000" when (ForceNop='1') else 
-     TapeIn&UsUk&Bit5&Kbd when (InPortFE='1') else (others=>'Z');
+Dout <= TapeIn&UsUk&Bit5&Kbd when (InPortFE='1') else (others=>'0');
+D <= Dout when ((ForceNop='1') or (InPortFE='1')) else (others=>'Z');
 
 end Behavioral;
 
