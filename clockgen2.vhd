@@ -3,12 +3,13 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
 entity clockgen2 is
-    Port ( CLKIN : in  STD_LOGIC;
+    Port ( CLKIN :     in  STD_LOGIC;
            RESET_NMI : in  STD_LOGIC;
-           CLKOUT : out  STD_LOGIC;
-			  CNT_NMI : out  STD_LOGIC;
-			  DBL_CLK : out  STD_LOGIC;           
-           BACKP : out  STD_LOGIC);
+
+           CLKOUT :  out  STD_LOGIC;
+		   CNT_NMI : out  STD_LOGIC;
+		   DBL_CLK : out  STD_LOGIC;           
+           BACKP :   out  STD_LOGIC);
 end clockgen2;
 
 architecture Behavioral of clockgen2 is
@@ -36,13 +37,13 @@ begin
 		if NMICNT = 206 then
 			NMICNT <= (others => '0');
 		else
-         NMICNT <= NMICNT + 1;
+            NMICNT <= NMICNT + 1;
 		end if;
    end if;
 end process;
 
-BACKP <= '1' when NMICNT(7 downto 4)="0010" else '0';   -- 31 to 64 -> BPorch
-CNT_NMI <= '1' when NMICNT(7 downto 4)="0001" else '0'; -- 16 to 31 -> NMI
+BACKP   <= '1' when NMICNT(7 downto 4)="0010" else '0';   -- 31 to 64 -> BPorch
+CNT_NMI <= '1' when NMICNT(7 downto 4)="0001" else '0';   -- 16 to 31 -> NMI
 
 end Behavioral;
 

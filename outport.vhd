@@ -1,11 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity outport is
     Port ( ForceNop : in  STD_LOGIC;
            InPortFE : in  STD_LOGIC;
@@ -22,8 +17,8 @@ signal Dout: std_logic_vector(7 downto 0);
 
 begin
 
-Dout <= TapeIn&UsUk&Bit5&Kbd when (InPortFE='1') else (others=>'0');
-D <= Dout when ((ForceNop='1') or (InPortFE='1')) else (others=>'Z');
+Dout <= TapeIn & UsUk & Bit5 & Kbd when (InPortFE='1') else (others=>'0');
+D    <= Dout when ((ForceNop='1') or (InPortFE='1')) else (others=>'Z');
 
 end Behavioral;
 
