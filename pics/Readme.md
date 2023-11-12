@@ -1,5 +1,9 @@
 Some pics :
 
+The test/dev platform :
+
+![devboard](IMG_20231112_103053.jpg)
+
 Memory mapping with A13 connected :
 
 ![memory1](IMG_20231107_162408.jpg)
@@ -7,4 +11,8 @@ Memory mapping with A13 connected :
 
 Demo : 25thanni
 
-
+![demo1]()
+![demo2]()
+![demo3]()
+![demo4]()
+![demo5]()
