@@ -12,14 +12,14 @@ entity zx81ula is
            NMI_n  :  out  STD_LOGIC;
            WAIT_n :  out  STD_LOGIC;
 			  
-		   Ah : in      STD_LOGIC_VECTOR(15 downto 13);
+			  Ah : in      STD_LOGIC_VECTOR(15 downto 13);
            A  : inout   STD_LOGIC_VECTOR(8 downto 0);
-		   D  : inout   STD_LOGIC_VECTOR(7 downto 0);
+			  D  : inout   STD_LOGIC_VECTOR(7 downto 0);
 
            ROMCS_n, RAMCS_n : out  STD_LOGIC;
 
            VIDEO   : inout  STD_LOGIC;
-           nTAPEIN : in     STD_LOGIC;
+           nTAPEIN : in     STD_LOGIC;				-- 0=default, 1=pulse High->Low
            KBD :     in     STD_LOGIC_VECTOR(4 downto 0);
 
            TST6, TST7 : out  STD_LOGIC);
@@ -42,19 +42,23 @@ signal intack,nmi_intern: std_logic;
 
 signal inv_char, inv_char2: std_logic;
 signal vsync: std_logic := '0';
-signal hsync,csync:std_logic;
-signal bp,bp_masked: std_logic;
+signal hsync:std_logic;
+signal bp: std_logic;
 signal pixel: std_logic;
 
-signal configreg: std_logic_vector(7 downto 0) := "00000000";
+signal configreg: std_logic_vector(7 downto 0) := "00000000";		-- bit 0 => inv. video for CHAR
+																						-- bit 1 => inv. border
 signal wr_mem8: std_logic;
 
 signal romsel, memaccess: std_logic;
 
+signal nowait_armed: std_logic;
+signal wait_orig: std_logic;
+signal wait_nowait: std_logic;
 
 begin
 
--- TESTs
+-- TESTs : debug pins
 
 TST6 <= nTAPEIN;
 TST7 <= hsync;
@@ -62,7 +66,19 @@ TST7 <= hsync;
 -- Used or Unused -- mapped to pin 22 (US/UK) ?
 -- Default design, equiv. to the ZX81 transistor logic
 
-WAIT_n <= nmi_intern or (not HALT_n);  -- i.e. NMI or not HALT
+WAIT_n <= wait_nowait when configreg(2)='1' else wait_orig;
+
+wait_orig <= nmi_intern or (not HALT_n);  -- i.e. NMI or not HALT
+wait_nowait <= nmi_intern or (not nowait_armed) ;
+
+process(HALT_n,nmi_intern)
+begin
+   if nmi_intern = '1' then
+      nowait_armed <= '0';
+   elsif (HALT_n'event and HALT_n= '1') then
+      nowait_armed <= '1';
+   end if;
+end process;
 
 -- CLOCK generator & NMI generator
 
@@ -129,12 +145,13 @@ end process;
 
 -- TState Decoder
 
-exec <= Ah(15) and HALT_n and (not MREQ_n);
-			  
+-- TO DO : test M1not -> exec <= Ah(15) and (not configreg(3) or Ah(14)) and HALT_n and (not MREQ_n);
+exec <= Ah(15) and (not configreg(3) or Ah(14)) and HALT_n and (not MREQ_n);			  
+
 STATE_DEC: entity work.Tstate
 	port map (
 		EXEC => exec,
-        M1_n => M1_n,
+      M1_n => M1_n,
 		CLK => CPU_CLK,
 		DATA6 => D(6),
 		cycle_T2 => addlatch_en,
@@ -181,10 +198,10 @@ PIXSHIFT_BLK: entity work.shifter2
 		INV => inv_char2,
 		D => D,
 		SHIFTOUT => pixel);
- 
-VIDEO <=         '0' when (hsync='1' or vsync='1')      -- sync level = '0'
-            else 'Z' when (bp='1' or pixel='1')         -- backporch and black level = 'Z'
-			else '1';                                   -- white = '1'
+
+VIDEO <=   '0' when (hsync='1' or vsync='1')      -- sync level = '0'
+      else 'Z' when (bp='1' or pixel='1')         -- backporch and black level = 'Z'
+		else '1';                                   -- white = '1'
 				
 end Behavioral;
 
