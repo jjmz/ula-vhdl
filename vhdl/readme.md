@@ -1,6 +1,7 @@
-CONFIGREG
--- Unlock access with : poke 67,89
--- Place value in 66 (poke 66,value)
+CONFIGREG :
+
+- Unlock access with : poke 67,89
+- Place value in 66 (poke 66,value)
 
 -- bit 0 -> Inverse Video (char)
 -- bit 1 -> Inverse Video (border)
