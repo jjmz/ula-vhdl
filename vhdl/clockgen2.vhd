@@ -5,10 +5,12 @@ use ieee.std_logic_unsigned.all;
 entity clockgen2 is
     Port ( CLKIN :     in  STD_LOGIC;
            RESET_NMI : in  STD_LOGIC;
-
+			  START     : in STD_LOGIC;
+			  
            CLKOUT :  out  STD_LOGIC;
-		   CNT_NMI : out  STD_LOGIC;
-		   DBL_CLK : out  STD_LOGIC;           
+			  TURBOCLK: out  STD_LOGIC;
+		     CNT_NMI : out  STD_LOGIC;
+		     DBL_CLK : out  STD_LOGIC;           
            BACKP :   out  STD_LOGIC);
 end clockgen2;
 
@@ -26,13 +28,14 @@ begin
 	end if;
 end process;
 
-DBL_CLK <= DIVCNT(1);		-- 26Mhz / 4 => 6.5  Mhz (Pixel Shift)
-CLKOUT  <= DIVCNT(2);		-- 26Mhz / 8 => 3.25 Mhz (CPU)
+TURBOCLK <= DIVCNT(0);
+DBL_CLK  <= DIVCNT(1);		-- 26Mhz / 4 => 6.5  Mhz (Pixel Shift)
+CLKOUT   <= DIVCNT(2);		-- 26Mhz / 8 => 3.25 Mhz (CPU)
 
-process (DIVCNT(2), RESET_NMI) 
+process (DIVCNT(2), RESET_NMI) 		-- counter 0-206 (207 cycles)
 begin
    if RESET_NMI='1' then 
-      NMICNT <= (others => '0');
+      NMICNT <= "00"&START&"00000";
    elsif DIVCNT(2)='1' and DIVCNT(2)'event then
 		if NMICNT = 206 then
 			NMICNT <= (others => '0');
@@ -42,7 +45,7 @@ begin
    end if;
 end process;
 
-BACKP   <= '1' when NMICNT(7 downto 4)="0010" else '0';   -- 31 to 64 -> BPorch
+BACKP   <= '1' when NMICNT(7 downto 4)="0010" else '0';   -- 32 to 63 -> BPorch
 CNT_NMI <= '1' when NMICNT(7 downto 4)="0001" else '0';   -- 16 to 31 -> NMI
 
 end Behavioral;

@@ -7,11 +7,10 @@ NET "MAINCLK" LOC=P15;
 NET "TST7" LOC=P63;
 NET "TST6" LOC=P64;
 
-NET "TST7" SLOW;
-NET "TST6" SLOW;
+# External clock for Turbo Mode
+NET "CLK_EXT" LOC=P43;
 
 NET "Z80CLK_n" LOC=P7;
-NET "Z80CLK_n" SLOW;
 
 NET "IORQ_n" LOC=P62;
 NET "MREQ_n" LOC=P4;
@@ -23,21 +22,17 @@ NET "ROMCS_n" LOC=P6;
 NET "RAMCS_n" SLOW;
 NET "ROMCS_n" SLOW;
 NET "VIDEO" LOC=P17;
-
-# Temporary until PCB v2
-#NET "nTAPEIN" LOC=P43;
-#v2
 NET "nTAPEIN" LOC=P22;
 
 NET "M1_n" LOC=P9;
 NET "HALT_n" LOC=P18;
 NET "NMI_n" LOC=P16;
-NET "NMI_n" SLOW;
 
+# Resonnator input not used - should be Low by default >>> Used for A13
 NET "Ah(13)" LOC=P48;
-#NET "WAITs" LOC=P1;
+
+# US/UK not used (UK->Floating, internal PU) >>> Used for WAIT signal (Normal or NoWait)
 NET "WAIT_n" LOC=P36;
-NET "WAIT_n" SLOW;
 
 NET "Ah(14)" LOC=P13;
 NET "Ah(15)" LOC=P19;
@@ -51,15 +46,6 @@ NET "D(5)" LOC=P24;
 NET "D(6)" LOC=P23;
 NET "D(7)" LOC=P20;
 
-NET "D(0)" SLOW;
-NET "D(1)" SLOW;
-NET "D(2)" SLOW;
-NET "D(3)" SLOW;
-NET "D(4)" SLOW;
-NET "D(5)" SLOW;
-NET "D(6)" SLOW;
-NET "D(7)" SLOW;
-
 NET "A<0>" LOC=P60;
 NET "A<1>" LOC=P59;
 NET "A<2>" LOC=P58;
@@ -70,24 +56,14 @@ NET "A<6>" LOC=P52;
 NET "A<7>" LOC=P56;
 NET "A<8>" LOC=P57;
 
-NET "A<0>" SLOW;
-NET "A<1>" SLOW;
-NET "A<2>" SLOW;
-NET "A<3>" SLOW;
-NET "A<4>" SLOW;
-NET "A<5>" SLOW;
-NET "A<6>" SLOW;
-NET "A<7>" SLOW;
-NET "A<8>" SLOW;
-
 NET "KBD<0>" LOC=P47;
 NET "KBD<1>" LOC=P40;
 NET "KBD<2>" LOC=P34;
 NET "KBD<3>" LOC=P32;
 NET "KBD<4>" LOC=P27;
 
-#NET "CPU_CLK" BUFG=CLK; 
-
-#Created by Constraints Editor (xc9572xl-vq64-10) - 2022/07/06
 NET "CPU_CLK" TNM_NET = CPU_CLK;
 TIMESPEC TS_CPU_CLK = PERIOD "CPU_CLK" 3.25 MHz HIGH 50%;
+
+#NET "VIDEO_not0001" NOREDUCE;
+#NET "DATA_OUT/D_or0000" NOREDUCE;

@@ -10,7 +10,7 @@ entity addrgen is
            LATCH_EN : in  STD_LOGIC;
            EN_OUT   : in  STD_LOGIC;
 
-		   CLK :      in  STD_LOGIC;
+		     CLK :      in  STD_LOGIC;
            INCA :     in  STD_LOGIC;
            RSTA :     in  STD_LOGIC;
 
@@ -35,16 +35,9 @@ begin
    end if;
 end process;
 
--- Latch Data @ T2.5 (falling edge of CPU_CLK)
--- CHAR <= D 
---LATCH_FDCE: for ii in 0 to 7 generate
--- inst_FDCEx: FDCE
---  port map ( Q => CHAR(ii), C => not CLK, CE => LATCH_EN, CLR => '0',D  => D(ii) );
---end generate LATCH_FDCE;
-
 process (CLK,LATCH_EN)
 begin
- if CLK='0' and CLK'event then
+ if CLK='1' and CLK'event then
   if LATCH_EN='1' then
    CHAR <= D;
   end if;
