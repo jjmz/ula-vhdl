@@ -110,7 +110,7 @@ NMI_n <= nmi_intern;
 -- ChipSelect
 
 romsel <= '1' when Ah="000" else '0';
-memaccess <= MREQ_n or t_nop;                -- t_nop masks all mem access (Data forced to x00)
+memaccess <= (MREQ_n and nT34) or t_nop;                -- t_nop masks all mem access (Data forced to x00)
 
 RAMCS_n <= memaccess when romsel='0' else '1';
 ROMCS_n <= memaccess when romsel='1' else '1';

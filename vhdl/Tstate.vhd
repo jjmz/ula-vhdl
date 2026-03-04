@@ -16,7 +16,7 @@ end Tstate;
 
 architecture Behavioral of Tstate is
 
-	type t_m1 is (Idle, T2a, T2b, T3a, T3b, T4a);
+	type t_m1 is (Idle, T2a, T2b, T3a, T3b, T4a, T4e);
 	signal next_state, state: t_m1;
 	
 begin
@@ -63,6 +63,9 @@ begin
 				ncycle_T3T4 <= '0';
 				next_state <= T4a;
 			when T4a =>
+				ncycle_T3T4 <= '0';
+				next_state <= T4e;
+			when T4e =>
 				ncycle_T3T4 <= '0';
 				end_T4   <= '1';
 				next_state <= Idle;

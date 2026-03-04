@@ -32,7 +32,7 @@ TURBOCLK <= DIVCNT(0);
 DBL_CLK  <= DIVCNT(1);		-- 26Mhz / 4 => 6.5  Mhz (Pixel Shift)
 CLKOUT   <= DIVCNT(2);		-- 26Mhz / 8 => 3.25 Mhz (CPU)
 
-process (DIVCNT(2), RESET_NMI) 		-- counter 0-206 (207 cycles)
+process (DIVCNT(2), RESET_NMI, START) 		-- counter 0-206 (207 cycles)
 begin
    if RESET_NMI='1' then 
       NMICNT <= "00"&START&"00000";
