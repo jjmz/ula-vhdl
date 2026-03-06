@@ -8,13 +8,13 @@ use ieee.std_logic_unsigned.all;
 entity addrgen is
     Port ( D        : in  STD_LOGIC_VECTOR (7 downto 0);
            LATCH_EN : in  STD_LOGIC;
-           EN_OUT   : in  STD_LOGIC;
+           -- EN_OUT   : in  STD_LOGIC;
 
 		     CLK :      in  STD_LOGIC;
            INCA :     in  STD_LOGIC;
            RSTA :     in  STD_LOGIC;
 
-           A   : inout  STD_LOGIC_VECTOR (8 downto 0);
+           Aout   : out  STD_LOGIC_VECTOR (8 downto 0);
 
            INV : out  STD_LOGIC);
 end addrgen;
@@ -30,14 +30,14 @@ process (INCA, RSTA)
 begin
    if RSTA='1' then 
       LCNT <= (others => '0');
-   elsif INCA='1' and INCA'event then
+   elsif rising_edge(INCA) then
       LCNT <= LCNT + 1;
    end if;
 end process;
 
 process (CLK,LATCH_EN)
 begin
- if CLK='1' and CLK'event then
+ if rising_edge(CLK) then
   if LATCH_EN='1' then
    CHAR <= D;
   end if;
@@ -45,8 +45,8 @@ begin
 end process;
 
 
-A   <= CHAR(5 downto 0)&LCNT when EN_OUT='1' else (others => 'Z');
-INV <= CHAR(7);
+Aout <= CHAR(5 downto 0)&LCNT;
+INV  <= CHAR(7);
 
 end Behavioral;
 

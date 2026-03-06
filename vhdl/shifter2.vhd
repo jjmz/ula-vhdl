@@ -19,7 +19,7 @@ begin
 
 process(CLK,LOAD)
 begin
-	if CLK='1' and CLK'event then
+	if rising_edge(CLK) then
 	   if (LOAD='1') then
 			REG <= D xor (INV&INV&INV&INV&INV&INV&INV&INV);
 		else

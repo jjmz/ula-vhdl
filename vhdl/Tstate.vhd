@@ -18,6 +18,8 @@ architecture Behavioral of Tstate is
 
 	type t_m1 is (Idle, T2a, T2b, T3a, T3b, T4a, T4e);
 	signal next_state, state: t_m1;
+	attribute FSM_ENCODING : string;
+	attribute FSM_ENCODING of state: signal is "COMPACT";
 	
 begin
 
@@ -25,7 +27,7 @@ begin
    begin
 	   if RESET='1' then
 		   state <= Idle;
-      elsif (CLK65'event and CLK65 = '1') then
+      elsif rising_edge(CLK65) then
          state <= next_state;
       end if;
    end process;

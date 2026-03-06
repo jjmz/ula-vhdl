@@ -17,14 +17,10 @@
   <files>
     <file xil_pn:name="addrgen.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="1"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="5"/>
     </file>
     <file xil_pn:name="clockgen2.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="5"/>
-    </file>
-    <file xil_pn:name="outport.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="4"/>
     </file>
     <file xil_pn:name="shifter2.vhd" xil_pn:type="FILE_VHDL">
@@ -37,7 +33,7 @@
     </file>
     <file xil_pn:name="zx81ula.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="6"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="7"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
     </file>
     <file xil_pn:name="pins.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -78,6 +74,7 @@
     <property xil_pn:name="Device Family" xil_pn:value="XC9500XL CPLDs" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Device Speed Grade/Select ABS Minimum" xil_pn:value="-10" xil_pn:valueState="default"/>
     <property xil_pn:name="Do Not Escape Signal and Instance Names in Netlist" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Enable Hardware Co-Simulation" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Enable Message Filtering" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Equivalent Register Removal XST" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Evaluation Development Board" xil_pn:value="None Specified" xil_pn:valueState="default"/>
@@ -131,7 +128,7 @@
     <property xil_pn:name="Mux Extraction" xil_pn:value="Yes" xil_pn:valueState="default"/>
     <property xil_pn:name="Netlist Hierarchy" xil_pn:value="As Optimized" xil_pn:valueState="default"/>
     <property xil_pn:name="Number of Clock Buffers" xil_pn:value="4" xil_pn:valueState="default"/>
-    <property xil_pn:name="Optimization Effort" xil_pn:value="High" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Optimization Effort" xil_pn:value="Normal" xil_pn:valueState="default"/>
     <property xil_pn:name="Optimization Goal" xil_pn:value="Speed" xil_pn:valueState="default"/>
     <property xil_pn:name="Other CPLD Fitter Command Line Options" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="Other Compiler Options" xil_pn:value="" xil_pn:valueState="default"/>
@@ -240,8 +237,8 @@
     <property xil_pn:name="PROP_PostSynthSimTop" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_PostXlateSimTop" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_PreSynthesis" xil_pn:value="PreSynthesis" xil_pn:valueState="default"/>
-    <property xil_pn:name="PROP_intProjectCreationTimestamp" xil_pn:value="2023-11-17T14:36:12" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="PROP_intWbtProjectID" xil_pn:value="4A400170580B1640FDFD1C8D52FFAC8C" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intProjectCreationTimestamp" xil_pn:value="2026-03-06T08:40:46" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intWbtProjectID" xil_pn:value="0F40378B01305A5F078D60CF0B3052A1" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_intWorkingDirLocWRTProjDir" xil_pn:value="Same" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_intWorkingDirUsed" xil_pn:value="No" xil_pn:valueState="non-default"/>
   </properties>

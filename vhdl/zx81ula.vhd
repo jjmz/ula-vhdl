@@ -13,7 +13,7 @@ entity zx81ula is
            WAIT_n :  out  STD_LOGIC;
 			  
 			  Ah : in      STD_LOGIC_VECTOR(15 downto 13);
-           A  : inout   STD_LOGIC_VECTOR(8 downto 0);
+           Al : inout   STD_LOGIC_VECTOR(8 downto 0);
 			  D  : inout   STD_LOGIC_VECTOR(7 downto 0);
 
            ROMCS_n, RAMCS_n : out  STD_LOGIC;
@@ -48,7 +48,7 @@ signal inv_char, inv_char2: std_logic;
 signal vsync: std_logic := '0';
 signal hsync:std_logic;
 signal bp: std_logic;
-signal pixel: std_logic;
+signal vidout,videna,pixel: std_logic;
 
 signal configreg: std_logic_vector(7 downto 0) := "00000000";
 signal reset_emu: std_logic;
@@ -56,6 +56,8 @@ signal reset_emu: std_logic;
 signal cfg_unlocked: std_logic;
 signal romsel, memaccess: std_logic;
 
+signal Dout,Din: std_logic_vector(7 downto 0);
+signal Aout,Ain: std_logic_vector(8 downto 0);
 
 -- CONFIGREG
 -- Unlock access with : poke 67,89
@@ -80,7 +82,7 @@ TST7 <= not cfg_unlocked;							--
 WAIT_GENE: entity work.waitgen
 	port map (
 		halt_n => HALT_n,
-		nmi => nmi_intern,
+		nmi_n => nmi_intern,
 		nowait_sw => configreg(2),
 		wait_n => WAIT_n
 	);
@@ -122,14 +124,14 @@ begin
  if (reset_emu='1') then
   configreg <= (others=>'0');
  else
-  if (CPU_CLK='1' and CPU_CLK'event) then
-   if (romsel='1' and A(8 downto 6)="001" and MREQ_n='0' and WR_n='0') then 	-- Any Write to Rom (64-127) , locks CFG
+  if rising_edge(CPU_CLK) then
+   if (romsel='1' and Ain(8 downto 6)="001" and MREQ_n='0' and WR_n='0') then 	-- Any Write to Rom (64-127) , locks CFG
     cfg_unlocked <= '0';
-    if (A(5 downto 0)="000011" and D="01011001") then
+    if (Ain(5 downto 0)="000011" and Din="01011001") then
      cfg_unlocked <= '1';														-- Unlck access CFG (poke 67,89) - 67=0x43,89=0x59
 	 end if;
-    if (A(5 downto 0)="000010" and cfg_unlocked='1') then			-- Mem66 - 66=0x42
-	  configreg <= D;										
+    if (Ain(5 downto 0)="000010" and cfg_unlocked='1') then			-- Mem66 - 66=0x42
+	  configreg <= Din;										
 	 end if;
    end if;
   end if;
@@ -141,7 +143,7 @@ end process;
 process(M1_n)
 begin
  if (M1_n='1' and M1_n'event) then
-  if (romsel='1' and A="000000000" and D="11010011") then				-- executing (M1) opcode D3 @ 0x00 => Out(x),a
+  if (romsel='1' and Ain="000000000" and Din="11010011") then				-- executing (M1) opcode D3 @ 0x00 => Out(x),a
    reset_emu <= '1';
   else
    reset_emu <= '0';
@@ -165,8 +167,8 @@ begin
  if (reset_emu='1') then
   clock_select<= '0';
  else 
-  if (CLK325='0' and CLK325'event) then
-   if (HALT_n='0' or out_fd='1' or (A(7 downto 0)="11111111" and io_wr='1')) then  
+  if falling_edge(CLK325) then
+   if (HALT_n='0' or out_fd='1' or (Ain(7 downto 0)="11111111" and io_wr='1')) then  
     clock_select<= '0';
    else
     if (out_fe='1') then
@@ -180,25 +182,25 @@ end process;
 -- IN/OUT
 
 io_wr <= not (IORQ_n or WR_n);						-- 1 if IORQ=0 & WR=0 (i.e. any OUT)
-in_fe <= not (IORQ_n or RD_n or A(0));				-- 1 if IORQ=0 & RD=0 & A0=0
+in_fe <= not (IORQ_n or RD_n or Ain(0));			-- 1 if IORQ=0 & RD=0 & A0=0
 																-- used for KBD/Tape too
 process(in_fe, io_wr)
 begin
  if io_wr='1' then
    vsync <= '0';
- elsif (in_fe='1' and in_fe'event) then
+ elsif rising_edge(in_fe) then
    vsync <= not nmi_on;								-- 1 if nmi_on was '0'
  end if;
 end process;
 
-out_fe <= io_wr and not A(0);
-out_fd <= io_wr and not A(1);
+out_fe <= io_wr and not Ain(0);
+out_fd <= io_wr and not Ain(1);
 
 process(out_fe, out_fd)
 begin
  if out_fd='1' then
    nmi_on <= '0';
- elsif (out_fe='1' and out_fe'event) then
+ elsif rising_edge(out_fe) then
    nmi_on <= '1';
  end if;
 end process;
@@ -214,12 +216,12 @@ STATE_DEC: entity work.Tstate
 		EXEC => exec,
       M1_n => M1_n,
 		CLK65 => CLK65,
-		DATA6 => D(6),
+		DATA6 => Din(6),
 		RESET => reset_emu,
-		cycle_T2 => addlatch_en,
+		cycle_T2    => addlatch_en,
+		mid_T2T3    => t_nop,
 		ncycle_T3T4 => nT34,
-		mid_T2T3 => t_nop,
-		end_T4 => t_load );
+		end_T4      => t_load );
 
 -- A8-A0 address generator
 
@@ -227,21 +229,22 @@ latch_out <= not (nT34 or Ah(14));	-- nT34=0 & A14=0 => A[8:0] forced by ULA
 
 ADDR8_0_GEN: entity work.addrgen
 	port map (
-		INCA => hsync, RSTA => vsync,		
-		D => D,
-		LATCH_EN => addlatch_en, CLK => CLK65,
-		EN_OUT => latch_out, INV => inv_char, A => A);
+		CLK => CLK65, INCA => hsync, RSTA => vsync,		
+		D => Din, LATCH_EN => addlatch_en, 
+		INV => inv_char, Aout => Aout);
+
+-- Tristate Address Lines : Al(7 downto 0)
+Al <= Aout when latch_out='1' else (others=>'Z');
+Ain <= Al; 		
 		
 -- NOP/DataOut, basically a big MUX
+-- 'output' no more used, as it hides 'tristate' construct
+--DATA_OUT: entity work.outport
+--	port map ( ForceNop => t_nop,InPortFE => in_fe,TapeIn => nTAPEIN,UsUk => '1', Bit5 => '0',Kbd => KBD,D => D);
 
-DATA_OUT: entity work.outport
-	port map (
-		ForceNop => t_nop,
-		InPortFE => in_fe,
-		TapeIn => nTAPEIN,
-		UsUk => '1', Bit5 => '0',
-		Kbd => KBD,
-		D => D);
+Dout <= nTAPEIN&"10"&KBD when (in_fe='1') else (others=>'0');
+D <= Dout when (t_nop='1') or (in_fe='1') else (others=>'Z');
+Din <= D;
 
 -- VIDEO : Shifter + TriState output
 
@@ -253,12 +256,27 @@ PIXSHIFT_BLK: entity work.shifter2
 		CLK => CLK65,
 		CARRYIN => configreg(1),
 		INV => inv_char2,
-		D => D,
+		D => Din,
 		SHIFTOUT => pixel);
 
-VIDEO <=   '0' when (hsync='1' or vsync='1')      -- sync level = '0'
-      else 'Z' when (bp='1' or pixel='1')         -- backporch and black level = 'Z'
-		else '1';                                   -- white = '1'
+-- v1
+--VIDEO <=   '0' when (hsync='1' or vsync='1')      -- sync level = '0'
+--      else 'Z' when (bp='1' or pixel='1')         -- backporch and black level = 'Z'
+--      else '1';                                   -- white = '1'
+
+process(MAINCLK)
+begin
+ if rising_edge(MAINCLK) then
+  vidout <= not (hsync or vsync);
+  videna <= (not bp and not pixel) or hsync or vsync;
+ end if;
+end process;
+
+-- v2
+--vidout <= '0' when (hsync='1' or vsync='1') else '1';
+--VIDEO <= vidout when ((bp='0' and pixel='0') or hsync='1' or vsync='1') else 'Z';
 				
+VIDEO <= vidout when videna='1' else 'Z';
+
 end Behavioral;
 

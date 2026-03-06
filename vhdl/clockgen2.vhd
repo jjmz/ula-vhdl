@@ -23,8 +23,22 @@ begin
 
 process(CLKIN)
 begin
-   if CLKIN='1' and CLKIN'event then
-		DIVCNT <= DIVCNT + 1;
+   if rising_edge(CLKIN) then
+		DIVCNT(0) <= not DIVCNT(0);
+	end if;
+end process;
+
+process(DIVCNT(0))
+begin
+   if rising_edge(DIVCNT(0)) then
+		DIVCNT(1) <= not DIVCNT(1);
+	end if;
+end process;
+
+process(DIVCNT(1))
+begin
+   if rising_edge(DIVCNT(1)) then
+		DIVCNT(2) <= not DIVCNT(2);
 	end if;
 end process;
 
@@ -36,11 +50,11 @@ process (DIVCNT(2), RESET_NMI, START) 		-- counter 0-206 (207 cycles)
 begin
    if RESET_NMI='1' then 
       NMICNT <= "00"&START&"00000";
-   elsif DIVCNT(2)='1' and DIVCNT(2)'event then
+   elsif rising_edge(DIVCNT(2)) then
 		if NMICNT = 206 then
 			NMICNT <= (others => '0');
 		else
-            NMICNT <= NMICNT + 1;
+         NMICNT <= NMICNT + 1;
 		end if;
    end if;
 end process;
