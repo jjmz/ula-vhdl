@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<DesignStrategy goal="Balanced you wish." strategy="zx81" version="12.1">
+
+  <Description></Description>
+
+  <DeviceList devices="xc9500xl"/>
+
+  <Properties>
+    <property name="Synthesize - XST:Optimization Goal" value="Speed"/>
+    <property name="Synthesize - XST:Optimization Effort" value="High"/>
+    <property name="Synthesize - XST:Use Synthesis Constraints File" value="true"/>
+    <property name="Synthesize - XST:Synthesis Constraints File" value=""/>
+    <property name="Synthesize - XST:Library Search Order" value=""/>
+    <property name="Synthesize - XST:Keep Hierarchy" value="Yes"/>
+    <property name="Synthesize - XST:Netlist Hierarchy" value="As Optimized"/>
+    <property name="Synthesize - XST:Generate RTL Schematic" value="Yes"/>
+    <property name="Synthesize - XST:Hierarchy Separator" value="/"/>
+    <property name="Synthesize - XST:Bus Delimiter" value="&lt;>"/>
+    <property name="Synthesize - XST:Case" value="Maintain"/>
+    <property name="Synthesize - XST:Work Directory" value="/home/ise/Desktop/ZX81_ULA-in-a-CPLD_v1.10/ZX81_ULA-vhdl/xst"/>
+    <property name="Synthesize - XST:HDL INI File" value=""/>
+    <property name="Synthesize - XST:Verilog 2001" value="true"/>
+    <property name="Synthesize - XST:Verilog Include Directories" value=""/>
+    <property name="Synthesize - XST:Generics, Parameters" value=""/>
+    <property name="Synthesize - XST:Verilog Macros" value=""/>
+    <property name="Synthesize - XST:Other XST Command Line Options" value=""/>
+    <property name="Synthesize - XST:FSM Encoding Algorithm" value="Johnson"/>
+    <property name="Synthesize - XST:Safe Implementation" value="No"/>
+    <property name="Synthesize - XST:Case Implementation Style" value="None"/>
+    <property name="Synthesize - XST:Mux Extraction" value="Yes"/>
+    <property name="Synthesize - XST:Resource Sharing" value="true"/>
+    <property name="Synthesize - XST:Add I/O Buffers" value="true"/>
+    <property name="Synthesize - XST:Equivalent Register Removal" value="true"/>
+    <property name="Synthesize - XST:Clock Enable" value="true"/>
+    <property name="Synthesize - XST:Macro Preserve" value="true"/>
+    <property name="Synthesize - XST:XOR Preserve" value="true"/>
+    <property name="Synthesize - XST:WYSIWYG" value="None"/>
+    <property name="Translate:Macro Search Path" value=""/>
+    <property name="Translate:Allow Unmatched LOC Constraints" value="false"/>
+    <property name="Translate:Allow Unmatched Timing Group Constraints" value="false"/>
+    <property name="Translate:Other Ngdbuild Command Line Options" value=""/>
+    <property name="Fit:Implementation Template" value="Optimize Balance"/>
+    <property name="Fit:Use Location Constraints" value="Always"/>
+    <property name="Fit:Output Slew Rate" value="Fast"/>
+    <property name="Fit:Default Powerup Value of Registers" value="Low"/>
+    <property name="Fit:I/O Pin Termination" value="Float"/>
+    <property name="Fit:Use Global Clocks" value="true"/>
+    <property name="Fit:Use Global Output Enables" value="true"/>
+    <property name="Fit:Use Global Set/Reset" value="true"/>
+    <property name="Fit:Create Programmable GND Pins on Unused I/O" value="false"/>
+    <property name="Fit:Macrocell Power Setting" value="Std"/>
+    <property name="Fit:Use Timing Constraints" value="true"/>
+    <property name="Fit:Logic Optimization" value="Speed"/>
+    <property name="Fit:Preserve Unused Inputs" value="false"/>
+    <property name="Fit:Exhaustive Fit Mode" value="false"/>
+    <property name="Fit:Use Multi-level Logic Optimization" value="true"/>
+    <property name="Fit:Collapsing Input Limit (2-54)" value="54"/>
+    <property name="Fit:Collapsing Pterm Limit (1-90)" value="25"/>
+    <property name="Fit:Other CPLD Fitter Command Line Options" value=""/>
+    <property name="Fit:HDL Equations Style" value="Source"/>
+    <property name="Fit:Timing Report Format" value="Summary"/>
+    <property name="Fit:Other Timing Report Command Line Options" value=""/>
+    <property name="Fit:Generate Post-Fit Simulation Model" value="false"/>
+    <property name="Generate Programming File:Autosignature Generation" value="false"/>
+    <property name="Generate Programming File:Signature /User Code" value=""/>
+    <property name="Generate Programming File:Create IEEE 1532 Configuration File" value="false"/>
+    <property name="Generate Programming File:Other Programming Command Line Options" value=""/>
+  </Properties>
+
+</DesignStrategy>
